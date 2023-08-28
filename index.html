@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    Name:<br>
+    <input type="Name" id="namebox"><br>
+    Rollno:<br>
+    <input type="roll no" id="rollno"><br>
+    Section:<br>
+    <input type="section" id="secbox"><br>
+    <select id="Genbox"><br>
+        <option value="Male">Male</option>
+        <option value="feMale">femaale</option>
+    </select>
+    <hr>
+    <button id="Insbtn">INSERT</button>
+    <button id="selbtn">SELECT</button>
+    <button id="updbtn">UPDATE</button>
+    <button id="delbtn">DELETE</button>
+
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-app.js";
+        import { getDatabase, get, ref, set, child, update, remove } from "https://www.gstatic.com/firebasejs/10.3.0/firebase-database.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDAJr9-j0zBzb6uDodX_qd9-biChObPmAA",
+            authDomain: "figma-5fd70.firebaseapp.com",
+            databaseURL: "https://figma-5fd70-default-rtdb.firebaseio.com",
+            projectId: "figma-5fd70",
+            storageBucket: "figma-5fd70.appspot.com",
+            messagingSenderId: "1053497825193",
+            appId: "1:1053497825193:web:532ff758e36e9922a016b8"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app)
+
+        ///////////////////////REFRENCE ///////////////////////////////
+        var namebox = document.getElementById("namebox")
+        var rollno = document.getElementById("rollno")
+        var secbox = document.getElementById("secbox")
+        var Genbox = document.getElementById("Genbox")
+
+
+        var insbtn = document.getElementById("Insbtn")
+        var selbtn = document.getElementById("selbtn")
+        var updbtn = document.getElementById("updbtn")
+        var delbtn = document.getElementById("delbtn")
+
+        //////////////////INSERT DATA///////////////////////////
+
+
+
+        ///anything in this after the student byr db is always constant
+        /////////////////////////////////INSERT DATA///////////////////////////
+        function InsertData() {
+            set(ref(db, "The student" + secbox.value), {
+                Nameofstd: namebox.value,
+                Rollno: rollno.value,
+                Section: secbox.value,
+                Gender: Genbox.value
+            })
+                .then(() => {
+                    // Signed in 
+                    alert("datastored")
+                    // ...
+                })
+                .catch(() => {
+                    alert(" no datastored")
+                    // ..
+                });
+        }
+        ////////////////////EVENT OF BtN//////////////////////////
+        insbtn.addEventListener("click", InsertData)
+
+        ///////////////////////SELECT DATA///////////////////////////
+        selbtn.addEventListener("click", selectdata)
+        function selectdata() {
+            const dbref = ref(db);
+            get(child(dbref, "The student" + rollno.value))
+                .then((snapshot) => {
+                    if (snapshot.exists()) {
+                        namebox.value = snapshot.val().Nameofstd
+                        secbox.value = snapshot.val().Section
+                        Genbox.value = snapshot.val().Gender
+                    }
+                    else {
+                        alert("no data found")
+                    }
+                })
+        }
+        ////////////////////EVENT OF BtN//////////////////////////
+        selbtn.addEventListener("click", selectdata)
+
+        ///////////////////////UPDATE DATA///////////////////////////
+
+        updbtn.addEventListener("click", UpdateData)
+        function UpdateData() {
+            Update(ref(db, "The student" + rollno.value), {
+                Nameofstd: namebox.value,
+                Section: secbox.value,
+                Gender: Genbox.value
+            })
+                .then(() => {
+                    // Signed in 
+                    alert("datastored")
+                    // ...
+                })
+                .catch(() => {
+                    alert(" no datastored")
+                    // ..
+                });
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>
